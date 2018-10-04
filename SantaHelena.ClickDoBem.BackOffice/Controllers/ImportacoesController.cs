@@ -23,7 +23,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         {
 
             IFormFile arquivo = null;
-            string url = "http://localhost:5010";
+            string url = Environment.GetEnvironmentVariable("API_SERVER");
 
             try { arquivo = Request.Form.Files.FirstOrDefault(); }
             finally { /* Nada a fazer */ }
