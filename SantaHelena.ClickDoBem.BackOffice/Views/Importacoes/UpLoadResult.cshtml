@@ -1,0 +1,37 @@
+﻿@model ImportacaoDocumentoViewModel
+@{
+    ViewData["Title"] = "Importar Arquivo Documento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalhes do processamento</h3>
+
+<div class="form-group">
+    <div class="@(Model.Sucesso ? "text-sucess" : "text-danger")"><strong>Processado com sucesso:</strong> @(Model.Sucesso ? "Sucesso" : "Falha")</div>
+    <div><strong>Total de Linhas processadas:</strong> @Model.Linhas.Count().ToString("N0")</div>
+    <div><strong>Detalhe do processamento:</strong> @Model.Detalhe</div>
+</div>
+
+<table class="table">
+    <thead class="first-row">
+        <tr>
+            <th>Linha</th>
+            <th>Status</th>
+            <th>Conteúdo</th>
+            <th>Detalhe</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (LinhaDocumentoViewModel l in Model.Linhas.OrderBy(x => x.Sucesso))
+        {
+            <tr class="@(l.Sucesso ? "text-success" : "text-danger")">
+                <td>@l.Linha</td>
+                <td>@(l.Sucesso ? "Sucesso" : "Falha")</td>
+                <td>@l.Conteudo</td>
+                <td>@l.Detalhe</td>
+            </tr>
+        }
+    </tbody>
+
+</table>

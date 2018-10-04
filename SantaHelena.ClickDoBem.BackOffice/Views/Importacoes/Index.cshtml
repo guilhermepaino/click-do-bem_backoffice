@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewData["Title"] = "Importar Arquivo Documento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Importar arquivo de documento</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ImportarArquivo" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    <label class="btn btn-default" for="my-file-selector">
+                        <input id="my-file-selector" type="file" name="files" style="display:none" onchange="$('#upload-file-info').html(this.files[0].name)">
+                        Escolher arquivo
+                    </label>
+                    <span class='label label-info' id="upload-file-info"></span>
+                </div>
+            </div>
+            @*<div class="form-group">
+                    <input type="file" name="files" />
+                </div>*@
+
+            <div class="form-group">&nbsp;</div>
+            <div class="form-group">&nbsp;</div>
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="submit" value="Enviar para processamento" class="btn btn-default" />
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
