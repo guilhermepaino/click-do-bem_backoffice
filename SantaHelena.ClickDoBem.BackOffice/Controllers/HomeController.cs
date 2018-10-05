@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SantaHelena.ClickDoBem.BackOffice.Models;
 
@@ -10,6 +11,8 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
 {
     public class HomeController : Controller
     {
+
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
