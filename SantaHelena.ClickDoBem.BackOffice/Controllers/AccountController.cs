@@ -84,12 +84,8 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string returnUrl = null)
+        public IActionResult Login(string returnUrl = null)
         {
-            // Clear the existing external cookie to ensure a clean login process
-            //await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            //ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
@@ -162,12 +158,6 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
-        }
-
-        [HttpGet]
-        public IActionResult AcessoNegado()
-        {
-            return View();
         }
 
         #endregion
