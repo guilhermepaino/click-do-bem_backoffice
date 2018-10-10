@@ -105,13 +105,6 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                     if (resposta.Sucesso)
                     {
                         // Registrar o Cookie
-
-                        //CookieOptions authCookie = new CookieOptions()
-                        //{
-                        //    Expires = DateTime.Now.AddMinutes(10)
-                        //};
-                        //Response.Cookies.Append("_ClickBemBackOffice", "true", authCookie);
-
                         IList<Claim> claims = new List<Claim>
                         {
                             new Claim("Login", model.Login),
@@ -126,8 +119,8 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                         AuthenticationProperties authProperties = new AuthenticationProperties
                         {
                             AllowRefresh = true,
-                            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                            //IsPersistent = true,
+                            ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1),
+                            IsPersistent = model.Lembrar,
                             RedirectUri = "/home"
                         };
 
