@@ -1,1 +1,141 @@
-﻿PESQUISAR ITEM DE DOAÇÃO E/OU NECESSIDADE
+﻿@{
+    ViewData["Title"] = "Pesquisar Doações/Necessidades";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Pesquisar Doações/Necessidades</h2>
+<br />
+
+<h4>Filtros</h4>
+
+<script type="text/javascript" src="https://formden.com/static/cdn/formden.js"></script>
+<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
+
+<style>
+    .bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form {
+        font-family: Arial, Helvetica, sans-serif;
+        color: black
+    }
+
+    .bootstrap-iso form button, .bootstrap-iso form button:hover {
+        color: white !important;
+    }
+
+    .dropdown-picker-selected {
+        color: black !important;
+    }
+</style>
+
+<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+<div class="bootstrap-iso">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <form action="https://formden.com/post/MlKtmY4x/" class="form-horizontal" method="post">
+
+                    <div class="form-group ">
+                        <label class="control-label col-sm-2 requiredField" for="dataInicial">
+                            De:
+                        </label>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar">
+                                    </i>
+                                </div>
+                                <input class="form-control" id="periodo" name="DataInicial" placeholder="DD/MM/YYYY" type="text" />
+                            </div>
+                        </div>
+
+                        <label class="control-label col-sm-2 requiredField" for="dataInicial">
+                            Até:
+                        </label>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar">
+                                    </i>
+                                </div>
+                                <input class="form-control" id="periodo" name="DataFinal" placeholder="DD/MM/YYYY" type="text" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group ">
+                        <label class="control-label col-sm-2 requiredField" for="dataInicial">
+                            Tipo:
+                        </label>
+
+                        <div class="col-sm-4">
+                            <div class="input-group drop">
+
+                                <div>
+                                    <select id="combofiltro" name="tipo" class="selectpicker" data-style="btn btn-info btn-round select-with-transition dropdown-picker-selected" data-toggle="dropdown">
+                                        <option value="">Todos</option>
+                                        <option value="0acd2b81-c5a5-11e8-ab80-0242ac110006">Necessidade</option>
+                                        <option value="0acd2bb5-c5a5-11e8-ab80-0242ac110006">Doação</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group ">
+                        <label class="control-label col-sm-2 requiredField" for="dataInicial">
+                            Categoria:
+                        </label>
+
+                        <div class="col-sm-4">
+                            <div class="input-group drop">
+
+                                <div>
+                                    <select id="combofiltro" name="categoria" class="selectpicker" data-live-search="false" data-style="btn btn-info btn-round select-with-transition dropdown-picker-selected" data-toggle="dropdown">
+                                        <option value="">Todos</option>
+                                        <option value="2ef307a6-c4a5-11e8-8776-0242ac110006">Higiene e limpeza</option>
+                                        <option value="340c1a33-c4a5-11e8-8776-0242ac110006">Bebê</option>
+                                        <option value="38f292cc-c4a5-11e8-8776-0242ac110006">Telefonia e acessórios</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+
+<script>
+    $(document).ready(function () {
+        var date_input = $('input[id="periodo"]'); //our date input has the name "date"
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+    });
+
+    $('#combofiltro').selectpicker({
+        liveSearch: false,
+        showTick: true,
+        width: 'auto'
+    });
+
+</script>
