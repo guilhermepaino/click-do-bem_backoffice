@@ -347,7 +347,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
 
             try
             {
-                // response = await ExecutaMatch(request.NecessidadeId.Value, request.DoacaoId.Value);
+                response = await ExecutaMatch(request.NecessidadeId.Value, request.DoacaoId.Value);
             }
             catch (SessaoExpiradaException)
             {

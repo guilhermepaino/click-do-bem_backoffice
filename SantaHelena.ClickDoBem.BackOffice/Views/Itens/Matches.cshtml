@@ -58,7 +58,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-12">
-                <form asp-area="" asp-controller="Itens" asp-action="FiltrarMatches" name="form-filtro" class="form-horizontal" method="post" autocomplete="off">
+                <form asp-area="" asp-controller="Itens" asp-action="FiltrarMatches" id="form-filtro" class="form-horizontal" method="post" autocomplete="off">
 
                     <div class="form-group ">
                         <label class="control-label col-sm-2 requiredField" for="DataInicial">
@@ -330,13 +330,8 @@
                 success: function (resp) {
                     if (resp.sucesso) {
 
-                        //alert('Match realizado com sucesso!\r\nOs dados serão recarregados');
-
-                        var $form = $('#form-filtro');
-                        var button = $form.find('input[type=submit]');
-
-                        console.log(button);
-
+                        alert('Match realizado com sucesso!\r\nOs dados serão recarregados');
+                        $('#form-filtro').submit();
                     }
                     else {
                         alert('Não foi possível realizar o match!\r\nMotivo: ' + resp.mensagem);
