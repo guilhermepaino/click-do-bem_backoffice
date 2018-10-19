@@ -172,9 +172,22 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         private async Task CarregarDoacoesNecessidades(FiltroMatchViewModel filtro)
         {
 
+            Guid? categoriaId = null;
+
+            if (!string.IsNullOrWhiteSpace(filtro.Categoria) && !filtro.Categoria.Equals("-"))
+                categoriaId = Guid.Parse(filtro.Categoria);
+
+            FiltroItemRequest request = new FiltroItemRequest()
+            {
+                DataInicial = filtro.DataInicial,
+                DataFinal = filtro.DataFinal,
+                TipoItemId = null,
+                CategoriaId = categoriaId
+            };
+
             // Carregando Doações
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ObterToken());
-            HttpResponseMessage resultApi = await _client.GetAsync("/api/v1/Item");
+            HttpResponseMessage resultApi = await _client.PostAsJsonAsync("/api/v1/Item/livres", request);
             if (resultApi.StatusCode.Equals(HttpStatusCode.Unauthorized)) throw new SessaoExpiradaException();
             string conteudo = await resultApi.Content.ReadAsStringAsync();
 
@@ -198,7 +211,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                     GerenciadaRh = item.Categoria.GerenciadaRh
                 };
 
-                if (item.TipoItem.ToLower().Equals("necessidade"))
+                if (item.TipoItem.Descricao.ToLower().Equals("necessidade"))
                     necessidades.Add(tmpItem);
                 else
                     doacoes.Add(tmpItem);

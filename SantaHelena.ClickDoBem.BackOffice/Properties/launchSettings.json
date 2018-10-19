@@ -25,6 +25,16 @@
       "applicationUrl": "http://localhost:5080"
       //"applicationUrl": "https://localhost:5001;http://localhost:5000"
     },
+    "BackOffice.ApiDevSH": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "API_SERVER": "http://dev-clickdobemapi.santahelena.com"
+      },
+      "applicationUrl": "http://localhost:5080"
+      //"applicationUrl": "https://localhost:5001;http://localhost:5000"
+    },
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,

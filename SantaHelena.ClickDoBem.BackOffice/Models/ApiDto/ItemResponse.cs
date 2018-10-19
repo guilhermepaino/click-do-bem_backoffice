@@ -11,7 +11,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.ApiDto
         public DateTime? DataAlteracao { get; set; }
         public string Titulo { get; set; }
         public string Descricao { get; set; }
-        public string TipoItem { get; set; }
+        public TipoItemResponse TipoItem { get; set; }
         public CategoriaResponse Categoria { get; set; }
         public UsuarioResponse Usuario { get; set; }
         public bool Anonimo { get; set; }
