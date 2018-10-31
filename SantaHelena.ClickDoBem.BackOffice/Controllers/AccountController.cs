@@ -121,13 +121,13 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                             AllowRefresh = true,
                             ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1),
                             IsPersistent = model.Lembrar,
-                            RedirectUri = "/home"
+                            RedirectUri = "/itens/pesquisar"
                         };
 
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(claimsIdentity), authProperties);
 
                         if (string.IsNullOrWhiteSpace(returnUrl))
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Pesquisar", "Itens");
                         return RedirectToPage(returnUrl);
                     }
                     else
