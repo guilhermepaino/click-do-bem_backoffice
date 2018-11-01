@@ -70,7 +70,8 @@
                                     <i class="fa fa-calendar">
                                     </i>
                                 </div>
-                                <input class="form-control" id="periodo" name="DataInicial" placeholder="dd/mm/aaaa" type="text" value="@dataInicial" />
+                                <input class="form-control" id="data-inicial" placeholder="dd/mm/aaaa" type="text" value="@dataInicial" />
+                                <input type="hidden" name="DataInicial" value="@dataInicial" />
                             </div>
                         </div>
 
@@ -83,7 +84,8 @@
                                     <i class="fa fa-calendar">
                                     </i>
                                 </div>
-                                <input class="form-control" id="periodo" name="DataFinal" placeholder="dd/mm/aaaa" type="text" value="@dataFinal" />
+                                <input class="form-control" id="data-final" placeholder="dd/mm/aaaa" type="text" value="@dataFinal" />
+                                <input type="hidden" name="DataFinal" value="@dataFinal" />
                             </div>
                         </div>
 
@@ -216,13 +218,43 @@
 
 <script>
     $(document).ready(function () {
-        var date_input = $('input[id="periodo"]'); //our date input has the name "date"
+
+        // Datepicker
+        var date_input = $('#data-inicial, #data-final'); //our date input has the name "date"
         date_input.datepicker({
             format: 'dd/mm/yyyy',
             todayHighlight: true,
             autoclose: true,
             pickerPosition: 'bottom-left',
             language: 'pt-BR',
+        });
+
+        // Datatable
+        $('#datatable').dataTable();
+        $("[data-toggle=tooltip]").tooltip();
+
+        $('#data-inicial').change(function () {
+
+            dia = $(this)[0].value.substring(0, 2);
+            mes = $(this)[0].value.substring(3, 5);
+            ano = $(this)[0].value.substring(6, 10);
+
+            data = ano + "-" + mes + "-" + dia;
+
+            $('input[name="DataInicial"]').val(data);
+
+        });
+
+        $('#data-final').change(function () {
+
+            dia = $(this)[0].value.substring(0, 2);
+            mes = $(this)[0].value.substring(3, 5);
+            ano = $(this)[0].value.substring(6, 10);
+
+            data = ano + "-" + mes + "-" + dia;
+
+            $('input[name="DataFinal"]').val(data);
+
         });
 
     });
@@ -239,12 +271,37 @@
         width: 'auto'
     });
 
-    $(document).ready(function () {
-        $('#datatable').dataTable();
+    // Post Pesquisar
+    //$('#btn-submit').click(function () {
 
-        $("[data-toggle=tooltip]").tooltip();
 
-    });
+    //    var datas = $('input[id="periodo"]');
+
+
+    //    //$.ajax({
+    //    //    url: '/Itens/RealizarMatch',
+    //    //    type: 'post',
+    //    //    dataType: 'json',
+    //    //    contentType: 'application/json',
+    //    //    data: JSON.stringify(request),
+    //    //    success: function (resp) {
+    //    //        if (resp.sucesso) {
+
+    //    //            alert('Match realizado com sucesso!\r\nOs dados serão recarregados');
+    //    //            $('#form-filtro').submit();
+    //    //        }
+    //    //        else {
+    //    //            alert('Não foi possível realizar o match!\r\nMotivo: ' + resp.mensagem);
+    //    //        }
+    //    //    },
+    //    //    error: function (e) {
+    //    //        console.log(e);
+    //    //        alert('Não foi possível realizar o match!\r\nMotivo: ' + resp.mensagem);
+    //    //    }
+    //    //});
+
+
+    //});
 
     $('#datatable').DataTable({
         "language": {
