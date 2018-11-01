@@ -3,8 +3,12 @@
     ViewData["Title"] = "Pesquisar Doações/Necessidades";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    string dataInicial = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("dd/MM/yyyy");
-    string dataFinal = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("dd/MM/yyyy");
+    string dataInicialBr = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("dd/MM/yyyy");
+    string dataInicial = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("yyyy-MM-dd");
+
+    string dataFinalBr = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("dd/MM/yyyy");
+    string dataFinal = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("yyyy-MM-dd");
+
 
 }
 
@@ -70,7 +74,7 @@
                                     <i class="fa fa-calendar">
                                     </i>
                                 </div>
-                                <input class="form-control" id="data-inicial" placeholder="dd/mm/aaaa" type="text" value="@dataInicial" />
+                                <input class="form-control" id="data-inicial" placeholder="dd/mm/aaaa" type="text" value="@dataInicialBr" />
                                 <input type="hidden" name="DataInicial" value="@dataInicial" />
                             </div>
                         </div>
@@ -84,7 +88,7 @@
                                     <i class="fa fa-calendar">
                                     </i>
                                 </div>
-                                <input class="form-control" id="data-final" placeholder="dd/mm/aaaa" type="text" value="@dataFinal" />
+                                <input class="form-control" id="data-final" placeholder="dd/mm/aaaa" type="text" value="@dataFinalBr" />
                                 <input type="hidden" name="DataFinal" value="@dataFinal" />
                             </div>
                         </div>
