@@ -3,8 +3,11 @@
     ViewData["Title"] = "Matches de Doações/Necessidades";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    string dataInicial = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("dd/MM/yyyy");
-    string dataFinal = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("dd/MM/yyyy");
+    string dataInicialBr = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("dd/MM/yyyy");
+    string dataInicial = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("yyyy-MM-dd");
+
+    string dataFinalBr = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("dd/MM/yyyy");
+    string dataFinal = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("yyyy-MM-dd");
 
 }
 
@@ -70,7 +73,8 @@
                                     <i class="fa fa-calendar">
                                     </i>
                                 </div>
-                                <input class="form-control" id="periodo" name="DataInicial" placeholder="dd/mm/aaaa" type="text" value="@dataInicial" />
+                                <input class="form-control" id="data-inicial" placeholder="dd/mm/aaaa" type="text" value="@dataInicialBr" />
+                                <input type="hidden" name="DataInicial" value="@dataInicial" />
                             </div>
                         </div>
 
@@ -83,7 +87,8 @@
                                     <i class="fa fa-calendar">
                                     </i>
                                 </div>
-                                <input class="form-control" id="periodo" name="DataFinal" placeholder="dd/mm/aaaa" type="text" value="@dataFinal" />
+                                <input class="form-control" id="data-final" placeholder="dd/mm/aaaa" type="text" value="@dataFinalBr" />
+                                <input type="hidden" name="DataFinal" value="@dataFinal" />
                             </div>
                         </div>
 
@@ -202,16 +207,6 @@
 
 <div class="container">
 
-    @{
-        if (!string.IsNullOrWhiteSpace(Model.Criticas))
-        {
-            <div class="alert alert-warning alert-dismissible">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <strong>AVISO!</strong> @Model.Criticas
-            </div>
-        }
-    }
-
     <div class="row">
 
         <div class="col-md-12">
@@ -273,7 +268,7 @@
     $(document).ready(function () {
 
         // Período
-        var date_input = $('input[id="periodo"]'); //our date input has the name "date"
+        var date_input = $('#data-inicial, #data-final'); //our date input has the name "date"
         date_input.datepicker({
             format: 'dd/mm/yyyy',
             todayHighlight: true,
@@ -296,6 +291,30 @@
             liveSearch: false,
             showTick: true,
             width: 'auto'
+        });
+
+        $('#data-inicial').change(function () {
+
+            dia = $(this)[0].value.substring(0, 2);
+            mes = $(this)[0].value.substring(3, 5);
+            ano = $(this)[0].value.substring(6, 10);
+
+            data = ano + "-" + mes + "-" + dia;
+
+            $('input[name="DataInicial"]').val(data);
+
+        });
+
+        $('#data-final').change(function () {
+
+            dia = $(this)[0].value.substring(0, 2);
+            mes = $(this)[0].value.substring(3, 5);
+            ano = $(this)[0].value.substring(6, 10);
+
+            data = ano + "-" + mes + "-" + dia;
+
+            $('input[name="DataFinal"]').val(data);
+
         });
 
         // Post Match

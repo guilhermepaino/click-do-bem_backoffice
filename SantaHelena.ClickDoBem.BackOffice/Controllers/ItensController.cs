@@ -59,6 +59,24 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         }
 
         /// <summary>
+        /// Efetiva o match informado
+        /// </summary>
+        /// <param name="id">Id do match</param>
+        protected async Task<SimpleResponse> EfetivaMatch(Guid id)
+        {
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ObterToken());
+            HttpResponseMessage resultApi = await _client.PostAsJsonAsync($"/api/v1/Item/match/efetivar/{id}", new { Id = id });
+            if (resultApi.StatusCode.Equals(HttpStatusCode.Unauthorized)) throw new SessaoExpiradaException();
+            string conteudo = await resultApi.Content.ReadAsStringAsync();
+
+            SimpleResponse response = JsonConvert.DeserializeObject<SimpleResponse>(conteudo);
+
+            return response;
+
+        }
+
+        /// <summary>
         /// Executa a chamada a API para efetivar o match
         /// </summary>
         /// <param name="necessidadeId">Id do item de necessidade</param>
@@ -167,6 +185,21 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         }
 
         /// <summary>
+        /// Carregar as opções de filtragem de efetivação
+        /// </summary>
+        /// <param name="efetivacaoEscolhida">Efetivação escolhida</param>
+        private IEnumerable<SelectListItem> CarregarEfetivacao(int? efetivacaoEscolhida)
+        {
+            IList<SelectListItem> selItens = new List<SelectListItem>();
+
+            selItens.Add(new SelectListItem("Todos", "0"));
+            selItens.Add(new SelectListItem("Pendentes", "1"));
+            selItens.Add(new SelectListItem("Efetivados", "2"));
+
+            return new SelectList(selItens, "Value", "Text", efetivacaoEscolhida?.ToString());
+        }
+
+        /// <summary>
         /// Carregar as doações e necessidades
         /// </summary>
         private async Task CarregarDoacoesNecessidades(FiltroMatchViewModel filtro)
@@ -228,24 +261,73 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         /// </summary>
         /// <param name="tipoItemSelecionado">Id do tipo de item selecionado</param>
         /// <param name="categoriaSelecionada">Id da categoria selecionada</param>
-        private async Task CarregarDropDown(string tipoItemSelecionado, string categoriaSelecionada)
+        private async Task CarregarDropDown(string tipoItemSelecionado, string categoriaSelecionada, int? efetivacao)
         {
             // SelectLists
             ViewBag.TipoItem = await CarregarTipoItem(tipoItemSelecionado);
             ViewBag.Categoria = await CarregarCategoria(categoriaSelecionada);
+            ViewBag.Efetivacao = CarregarEfetivacao(efetivacao);
+        }
+
+        /// <summary>
+        /// Carregar os matches
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        private async Task CarregarMatches(EfetivaMatchViewModel filtro)
+        {
+
+            Guid? categoriaId = null;
+
+            if (!string.IsNullOrWhiteSpace(filtro.Categoria) && !filtro.Categoria.Equals("-"))
+                categoriaId = Guid.Parse(filtro.Categoria);
+
+            bool? efetivados;
+            switch (filtro.Efetivacao)
+            {
+                case 1:
+                    efetivados = false;
+                    break;
+                case 2:
+                    efetivados = true;
+                    break;
+                default:
+                    efetivados = null;
+                    break;
+            }
+
+            PesquisaMatchRequest request = new PesquisaMatchRequest()
+            {
+                DataInicial = filtro.DataInicial,
+                DataFinal = filtro.DataFinal,
+                CategoriaId = categoriaId,
+                Efetivados = efetivados
+            };
+
+            // Carregando Doações
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ObterToken());
+            HttpResponseMessage resultApi = await _client.PostAsJsonAsync("/api/v1/Item/match/listar", request);
+
+            if (resultApi.StatusCode.Equals(HttpStatusCode.Unauthorized)) throw new SessaoExpiradaException();
+            string conteudo = await resultApi.Content.ReadAsStringAsync();
+
+            List<PesquisaMatchResponse> matches = JsonConvert.DeserializeObject<List<PesquisaMatchResponse>>(conteudo);
+
+            filtro.Matches = matches;
+
         }
 
         #endregion
 
 
-        #region ActionResults
+        #region Actions de Itens
 
         public async Task<IActionResult> Pesquisar()
         {
 
             try
             {
-                await CarregarDropDown(null, null);
+                await CarregarDropDown(null, null, null);
                 return View(new FiltroItensViewModel());
             }
             catch (SessaoExpiradaException)
@@ -259,7 +341,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         public async Task<IActionResult> Filtrar(FiltroItensViewModel model)
         {
 
-            await CarregarDropDown(model.TipoItem, model.Categoria);
+            await CarregarDropDown(model.TipoItem, model.Categoria, null);
 
             // Validações
             if (!(model.DataInicial == null && model.DataFinal == null))
@@ -293,11 +375,15 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
 
         }
 
+        #endregion
+
+        #region Actions de Matches
+
         public async Task<IActionResult> Matches(FiltroMatchViewModel model)
         {
             try
             {
-                await CarregarDropDown(null, null);
+                await CarregarDropDown(null, null, null);
                 return View(new FiltroMatchViewModel());
             }
             catch (SessaoExpiradaException)
@@ -310,7 +396,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         public async Task<IActionResult> FiltrarMatches(FiltroMatchViewModel model)
         {
 
-            await CarregarDropDown(null, model.Categoria);
+            await CarregarDropDown(null, model.Categoria, null);
 
             // Validações
             if (!(model.DataInicial == null && model.DataFinal == null))
@@ -347,8 +433,6 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         [HttpPost]
         public async Task<IActionResult> RealizarMatch([FromBody]MatchRequest request)
         {
-            //await CarregarDropDown(null, null);
-            //return View(new FiltroMatchViewModel());
 
             SimpleResponse response = new SimpleResponse();
 
@@ -357,18 +441,104 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                 response.Sucesso = false;
                 response.Mensagem = "É necessário informar o id do item de necesside e de doação";
             }
+            else
+            {
+                try
+                {
+                    response = await ExecutaMatch(request.NecessidadeId.Value, request.DoacaoId.Value);
+                }
+                catch (SessaoExpiradaException)
+                {
+                    return RedirectToAction("Logout", "Account");
+                }
 
+                response.Sucesso = true;
+
+            }
+
+
+            return StatusCode(StatusCodes.Status200OK, response);
+
+        }
+
+        public async Task<IActionResult> EfetivarMatch()
+        {
             try
             {
-                response = await ExecutaMatch(request.NecessidadeId.Value, request.DoacaoId.Value);
+                await CarregarDropDown(null, null, null);
+                return View(new EfetivaMatchViewModel());
             }
             catch (SessaoExpiradaException)
             {
                 return RedirectToAction("Logout", "Account");
             }
-            
-            response.Sucesso = true;
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> PesquisarMatches(EfetivaMatchViewModel model)
+        {
+
+            await CarregarDropDown(null, model.Categoria, model.Efetivacao);
+
+            // Validações
+            if (!(model.DataInicial == null && model.DataFinal == null))
+            {
+                if (model.DataInicial == null || model.DataFinal == null)
+                {
+                    model.Criticas = "Para filtrar por período é necessário preencher os dois campos";
+                }
+                else
+                {
+                    if (model.DataInicial.Value > model.DataFinal.Value)
+                    {
+                        model.Criticas = "A data inicial não pode ser superior a data final";
+                    }
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Criticas))
+            {
+                try
+                {
+                    await CarregarMatches(model);
+                    return View("EfetivarMatch", model);
+                }
+                catch (SessaoExpiradaException)
+                {
+                    return RedirectToAction("Logout", "Account");
+                }
+            }
+
+            return View("EfetivarMatch", model);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EfetivarMatch([FromBody]EfetivarMatchRequest request)
+        {
+
+            SimpleResponse response = new SimpleResponse();
+
+            if (request.Id == null)
+            {
+                response.Sucesso = false;
+                response.Mensagem = "O id do item deve ser informado";
+            }
+            else
+            {
+
+                try
+                {
+                    response = await EfetivaMatch(request.Id.Value);
+                }
+                catch (SessaoExpiradaException)
+                {
+                    return RedirectToAction("Logout", "Account");
+                }
+
+                response.Sucesso = true;
+
+            }
 
             return StatusCode(StatusCodes.Status200OK, response);
 
