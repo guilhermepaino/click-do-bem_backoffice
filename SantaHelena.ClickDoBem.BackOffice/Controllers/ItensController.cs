@@ -236,7 +236,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                 {
                     Id = item.Id,
                     DataInclusao = item.DataInclusao,
-                    Nome = (item.Anonimo ? "** ANÕNIMO **" : item.Usuario.Nome),
+                    Nome = item.Usuario.Nome,
                     Titulo = item.Titulo,
                     Descricao = item.Descricao,
                     Categoria = item.Categoria.Descricao,

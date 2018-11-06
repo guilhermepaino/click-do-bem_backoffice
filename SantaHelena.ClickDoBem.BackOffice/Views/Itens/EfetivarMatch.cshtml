@@ -210,7 +210,7 @@
                                 <td align="center">
                                     @if (!item.Efetivado)
                                     {
-                                        <a href="javascript:void(0)" title="Efetivar" data-key="@item.Id" id="btn-efetivar"><img src="~/images/done.png" /></a>
+                                        <a href="javascript:EfetivarMatch('@item.Id')" title="Efetivar"><img src="~/images/done.png" /></a>
                                     }
                                 </td>
                             </tr>
@@ -276,38 +276,6 @@
 
         });
 
-        $('#btn-efetivar').click(function (e) {
-            if (confirm('Confirma efetivação')) {
-
-                var request = {
-                    id: $(this).data('key')
-                };
-
-                $.ajax({
-                    url: '/Itens/EfetivarMatch',
-                    type: 'post',
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    data: JSON.stringify(request),
-                    success: function (resp) {
-                        if (resp.sucesso) {
-
-                            alert('Efetivação realizada com sucesso!\r\nOs dados serão recarregados');
-                            $('#form-filtro').submit();
-                        }
-                        else {
-                            alert('Não foi possível realizar o match!\r\nMotivo: ' + resp.mensagem);
-                        }
-                    },
-                    error: function (e) {
-                        console.log(e);
-                        alert('Não foi possível realizar o match!\r\nMotivo: ' + resp.mensagem);
-                    }
-                });
-
-            }
-        });
-
     });
 
     $('#datatable').DataTable({
@@ -336,5 +304,39 @@
             }
         }
     });
+
+    function EfetivarMatch(matchId) {
+
+        if (confirm('Confirma efetivação')) {
+
+            var request = {
+                id: matchId
+            };
+
+            $.ajax({
+                url: '/Itens/EfetivarMatch',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(request),
+                success: function (resp) {
+                    if (resp.sucesso) {
+
+                        alert('Efetivação realizada com sucesso!\r\nOs dados serão recarregados');
+                        $('#form-filtro').submit();
+                    }
+                    else {
+                        alert('Não foi possível realizar o match!\r\nMotivo: ' + resp.mensagem);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                    alert('Não foi possível realizar o match!\r\nMotivo: ' + resp.mensagem);
+                }
+            });
+
+        }
+
+    }
 
 </script>

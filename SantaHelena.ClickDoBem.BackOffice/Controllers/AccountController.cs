@@ -120,7 +120,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                         {
                             AllowRefresh = true,
                             ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1),
-                            IsPersistent = model.Lembrar,
+                            IsPersistent = true,
                             RedirectUri = "/itens/pesquisar"
                         };
 

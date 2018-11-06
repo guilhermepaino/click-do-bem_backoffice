@@ -15,9 +15,6 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.AccountViewModels
         [Required(ErrorMessage = "Informe a senha")]
         [DataType(DataType.Password)]
         public string Senha { get; set; }
-
-        [Display(Name = "Lembrar-me?")]
-        public bool Lembrar { get; set; }
     }
 
 }
