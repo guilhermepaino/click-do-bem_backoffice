@@ -23,6 +23,8 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.Itens
 
         public int Peso { get; set; }
 
+        public decimal Valor { get; set; }
+
         public bool GerenciadaRh { get; set; }
 
 

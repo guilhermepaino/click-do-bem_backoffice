@@ -148,6 +148,18 @@
                                 </div>
                             </div>
                         </div>
+
+                        @if (Model.Itens != null && Model.Itens.Count() > 0)
+                        {
+                            <div class="col-sm-6">
+                                <div class="input-group drop">
+                                    <div>
+                                        <input type="button" class="btn btn-sm" id="btn-download" value="Baixar Resultado" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
                     </div>
 
                 </form>
@@ -258,6 +270,34 @@
             data = ano + "-" + mes + "-" + dia;
 
             $('input[name="DataFinal"]').val(data);
+
+        });
+
+        $('#btn-download').click(function () {
+
+            var dataInicial = $('input[name="DataInicial"]')[0].value;
+            var dataFinal = $('input[name="DataFinal"]')[0].value;
+
+            var tipoItem = $("#filtro-tipo option:selected")[0].value;
+            var categoria = $("#filtro-categoria option:selected")[0].value;
+
+            var query = '?dataInicial=' + dataInicial + '&dataFinal=' + dataFinal + '&tipoItem=' + tipoItem + '&categoria=' + categoria;
+
+            $.ajax({
+                url: '/Itens/DownloadRelatorioItem' + query,
+                method: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = 'relatorio-itens.xlsx';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                }
+            });
 
         });
 
