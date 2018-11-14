@@ -50,9 +50,9 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.ApiDto
         public string Categoria { get; set; }
 
         /// <summary>
-        /// Valor do item
+        /// Faixa de valor do item
         /// </summary>
-        public decimal Valor { get; set; }
+        public string ValorFaixa { get; set; }
 
         /// <summary>
         /// Pontuação da categoria

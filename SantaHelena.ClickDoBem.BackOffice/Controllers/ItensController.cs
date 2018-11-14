@@ -579,7 +579,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                         Descricao = i.Descricao,
                         Categoria = i.Categoria,
                         Peso = i.Peso,
-                        Valor = i.Valor,
+                        ValorFaixa = i.ValorFaixa,
                         GerenciadaRh = i.GerenciadaRh
                     }
                 );
@@ -640,7 +640,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                         Descricao = m.Descricao,
                         Categoria = m.Categoria,
                         Pontuacao = m.Pontuacao,
-                        Valor = m.Valor,
+                        ValorFaixa = m.ValorFaixa,
                         GerenciadaRh = m.GerenciadaRh,
                         Efetivado = m.Efetivado
                     }

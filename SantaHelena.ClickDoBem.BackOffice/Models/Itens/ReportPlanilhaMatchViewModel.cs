@@ -100,14 +100,13 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.Itens
 
         [ExcelColumn(
             Order = 10,
-            Title = "Valor",
+            Title = "Faixa Valor",
             TitleVerticalAlignment = ExcelVerticalAlignment.Center,
             TitleHorizontalAlignment = ExcelHorizontalAlignment.Center,
             ContentVerticalAlignment = ExcelVerticalAlignment.Center,
-            ContentHorizontalAlignment = ExcelHorizontalAlignment.Right,
-            NumberFormat = "_-R$* #,##0.00_-;-R$* #,##0.00_-;_-R$* \" - \"??_-;_-@_-"
+            ContentHorizontalAlignment = ExcelHorizontalAlignment.Left
         )]
-        public decimal Valor { get; set; }
+        public string ValorFaixa { get; set; }
 
         [ExcelColumn(
             Order = 11,
