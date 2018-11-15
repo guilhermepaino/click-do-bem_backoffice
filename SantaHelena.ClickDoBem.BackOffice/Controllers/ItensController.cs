@@ -23,46 +23,16 @@ using SantaHelena.ClickDoBem.BackOffice.Models.Itens;
 namespace SantaHelena.ClickDoBem.BackOffice.Controllers
 {
 
-    public class ItensController : Controller
+    public class ItensController : CdbBaseController
     {
-
-        #region Objetos/Variáveis Locais
-
-        protected readonly string _url;
-        protected readonly HttpClient _client;
-        protected readonly string _token;
-        protected readonly IHostingEnvironment _hostingEnvironment;
-
-        #endregion
 
         #region Construtores
 
-        public ItensController(IHostingEnvironment hostingEnvironment)
-        {
-            _url = Environment.GetEnvironmentVariable("API_SERVER");
-            _client = new HttpClient();
-            _client.BaseAddress = new Uri(_url);
-            _hostingEnvironment = hostingEnvironment;
-        }
+        public ItensController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment) { }
 
         #endregion
 
         #region Métodos Locais
-
-        /// <summary>
-        /// Obter o token do usuário autenticado
-        /// </summary>
-        protected string ObterToken()
-        {
-            IEnumerable<Claim> claims = User.Claims;
-
-            Claim token = User.Claims.Where(x => x.Type.Equals("Token")).FirstOrDefault();
-
-            if (token == null)
-                return string.Empty;
-
-            return token.Value;
-        }
 
         /// <summary>
         /// Efetiva o match informado

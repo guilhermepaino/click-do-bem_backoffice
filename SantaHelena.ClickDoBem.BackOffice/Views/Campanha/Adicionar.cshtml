@@ -1,0 +1,174 @@
+﻿@model SantaHelena.ClickDoBem.BackOffice.Models.Campanha.CampanhaModel
+
+@{
+
+    ViewData["Title"] = "Adicionar Campanha";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string dataInicialBr = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("dd/MM/yyyy");
+    string dataInicial = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("yyyy-MM-dd hh:mm");
+
+    string dataFinalBr = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("dd/MM/yyyy");
+    string dataFinal = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("yyyy-MM-dd hh:mm");
+
+}
+
+<!-- Bootstrap -->
+<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+
+<!-- DatePicker -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.css" />
+
+<!-- Font-Awesome -->
+<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+<!-- Bootstrap -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
+
+<!-- Formden -->
+<script type="text/javascript" src="https://formden.com/static/cdn/formden.js"></script>
+
+<!-- DatePicker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
+<h2>Adicionar Campanha</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Adicionar">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group" style="padding-top: 30px;">
+
+                <label class="control-label col-sm-4 requiredField">
+                    Descrição:
+                </label>
+
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input name="Descricao" value="@Model.Descricao" class="form-control" style="width: 300px;" />
+                        <span asp-validation-for="Descricao" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 30px;">
+
+                <label class="control-label col-sm-4 requiredField">
+                    Início:
+                </label>
+
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar">
+                            </i>
+                        </div>
+                        <input class="form-control" id="data-inicial" placeholder="dd/mm/aaaa" type="text" value="@dataInicialBr" />
+                        <input type="hidden" name="DataInicial" id="data-inicial-value" value="@dataInicial" />
+                    </div>
+                    <span asp-validation-for="DataInicial" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 30px;">
+                <label class="control-label col-sm-4 requiredField">
+                    Término:
+                </label>
+
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar">
+                            </i>
+                        </div>
+                        <input class="form-control" id="data-final" placeholder="dd/mm/aaaa" type="text" value="@dataFinalBr" />
+                        <input type="hidden" name="DataFinal" id="data-final-value" value="@dataFinal" />
+                    </div>
+                    <span asp-validation-for="DataFinal" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 30px;">
+                <label class="control-label col-sm-4 requiredField">
+                    Prioridade:
+                </label>
+                <div class="col-sm-8">
+                    <div class="input-group drop">
+                        <div>
+                            <select asp-items="@ViewBag.Prioridade" name="Prioridade"
+                                    class="selectpicker"
+                                    data-style="btn btn-info btn-round select-with-transition dropdown-picker-selected"
+                                    data-toggle="dropdown"></select>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 50px;">
+                <input type="submit" id="btn-gravar" value="Gravar" class="btn btn-success" />
+                <input type="button" id="btn-voltar" value="Voltar" class="btn btn-warning" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+<script>
+    $(document).ready(function () {
+
+        // Datepicker
+        var date_input = $('#data-inicial, #data-final'); //our date input has the name "date"
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            autoclose: true,
+            orientation: 'bottom left',
+            language: 'pt-BR',
+        });
+
+        $('#data-inicial').change(function () {
+
+            dia = $(this)[0].value.substring(0, 2);
+            mes = $(this)[0].value.substring(3, 5);
+            ano = $(this)[0].value.substring(6, 10);
+
+            data = '';
+            if (dia != "" && mes != "" && ano != "")
+                data = ano + "-" + mes + "-" + dia;
+            
+            $('#data-inicial-value').val(data);
+
+        });
+
+        $('#data-final').change(function () {
+
+            dia = $(this)[0].value.substring(0, 2);
+            mes = $(this)[0].value.substring(3, 5);
+            ano = $(this)[0].value.substring(6, 10);
+
+            data = '';
+            if (dia != "" && mes != "" && ano != "")
+                data = ano + "-" + mes + "-" + dia;
+            
+            $('#data-final-value').val(data);
+
+        });
+
+        $('#btn-voltar').click(function () {
+            window.location.href = '/Campanha';
+        });
+
+    });
+
+
+</script>
