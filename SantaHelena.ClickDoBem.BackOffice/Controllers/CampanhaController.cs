@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using SantaHelena.ClickDoBem.BackOffice.Exceptions;
+using SantaHelena.ClickDoBem.BackOffice.Models;
 using SantaHelena.ClickDoBem.BackOffice.Models.ApiDto;
 using SantaHelena.ClickDoBem.BackOffice.Models.Campanha;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -93,7 +97,10 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
             HttpResponseMessage resultApi = await _client.GetAsync($"/api/v1/Campanha/{id.ToString()}");
             if (resultApi.StatusCode.Equals(HttpStatusCode.Unauthorized)) throw new SessaoExpiradaException();
             string conteudo = await resultApi.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<CampanhaModel>(conteudo);
+            CampanhaModel campanha = JsonConvert.DeserializeObject<CampanhaModel>(conteudo);
+            if (!string.IsNullOrWhiteSpace(campanha.Imagem))
+                campanha.Imagem = $"{_url}{campanha.Imagem}";
+            return campanha;
         }
 
         #endregion
@@ -179,6 +186,67 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
             ModelState.AddModelError(string.Empty, $"Ops, algo deu errado, {resposta.Mensagem.ToString()}");
             return View("Adicionar", model);
 
+
+        }
+
+
+        [HttpGet]
+        [ActionName("Upload")]
+        public async Task<IActionResult> Upload(Guid id)
+        {
+            CampanhaModel campanha = await LocalizarCampanha(id);
+            ViewBag.Prioridade = CarregarPrioridades(campanha.Prioridade);
+            return View("Upload", campanha);
+        }
+
+        [HttpPost, DisableRequestSizeLimit]
+        [ActionName("Upload")]
+        public async Task<IActionResult> Upload(Guid id, IFormFile arquivo)
+        {
+
+            // Salvar em pasta temporária
+            string nomeArquivoBase = ContentDispositionHeaderValue.Parse(arquivo.ContentDisposition).FileName.Trim('"');
+
+            string hashId = $"{(DateTime.Now.Ticks * (new Random().Next(2, 16))).ToString().Substring(0, 6)}".Replace("-", string.Empty);
+            string dataArquivo = DateTime.Now.ToString("yyyyMMddhhmmss");
+
+            string nomeArquivoFileServer = $"{hashId}-{dataArquivo}_{id.ToString()}.jpg";
+
+            string nomeCompleto = Path.Combine(_caminho, nomeArquivoFileServer);
+
+            // Validando tipo de arquivo pela extenção
+            string extensao = nomeArquivoBase.Split('.').LastOrDefault().ToLower();
+            if (string.IsNullOrWhiteSpace(extensao) || !"jpg|jpeg".Contains(extensao))
+                return View("Error", new ErrorViewModel() { Details = "Formato de arquivo inválido" });
+
+            // Validando tamanho do arquivo
+            using (FileStream stream = new FileStream(nomeCompleto, FileMode.Create))
+            {
+                arquivo.CopyTo(stream);
+            }
+
+            // Converter em Base64
+            byte[] bytes = System.IO.File.ReadAllBytes(nomeCompleto);
+            string arquivoImagemBase64 = Convert.ToBase64String(bytes);
+
+            try { System.IO.File.Delete(nomeCompleto); }
+            finally { /* Nada a fazer */ }
+
+            // Enviar para Api
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ObterToken());
+            HttpResponseMessage resultApi = await _client.PostAsJsonAsync($"/api/v1/Campanha/Imagem", new { CampanhaId = id.ToString(), ImagemBase64 = arquivoImagemBase64 });
+            if (resultApi.StatusCode.Equals(HttpStatusCode.Unauthorized)) throw new SessaoExpiradaException();
+            string conteudo = await resultApi.Content.ReadAsStringAsync();
+
+            SimpleResponse response = JsonConvert.DeserializeObject<SimpleResponse>(conteudo);
+            if (!response.Sucesso)
+                return View("Error", new ErrorViewModel() { Details = response.Mensagem });
+
+            // Redirecionar para 
+            CampanhaModel campanha = await LocalizarCampanha(id);
+            ViewBag.Prioridade = CarregarPrioridades(campanha.Prioridade);
+
+            return View("Editar", campanha);
 
         }
 

@@ -1,0 +1,102 @@
+﻿@model SantaHelena.ClickDoBem.BackOffice.Models.Campanha.CampanhaModel
+
+@{
+
+    ViewData["Title"] = "Upload de Imagem de Campanha";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string dataInicialBr = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("dd/MM/yyyy");
+
+    string dataFinalBr = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("dd/MM/yyyy");
+
+    string imagem = string.IsNullOrWhiteSpace(Model.Imagem) ? "/images/noimage.jpg" : Model.Imagem;
+
+}
+
+<!-- Bootstrap -->
+<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+
+<!-- Font-Awesome -->
+<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+<!-- Bootstrap -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
+
+<!-- Formden -->
+<script type="text/javascript" src="https://formden.com/static/cdn/formden.js"></script>
+
+<h2>Carregar Imagem de Campanha</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Upload" enctype="multipart/form-data">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <label asp-for="Id" class="control-label" hidden="hidden"></label>
+
+            <div class="form-group" style="padding-top: 30px;">
+
+                <label class="control-label col-sm-4 requiredField">
+                    Descrição:
+                </label>
+
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <label class="form-control" style="width: 300px;">@Model.Descricao</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 30px;">
+                <label class="control-label col-sm-4 requiredField">
+                    Imagem Atual:
+                </label>
+                <div class="col-sm-8">
+                    <div class="input-group drop">
+                        <img src="@imagem" width="320" height="240" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 30px;">
+                <label class="control-label col-sm-4 requiredField">
+                    Carregar:
+                </label>
+                <div class="col-sm-8">
+                    <div class="input-group drop">
+                        <input name="arquivo" type="file" />
+                        <br />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 50px">
+                <div class="col-sm-12">
+                    <input type="submit" id="btn-upload" value="Enviar" class="btn btn-success" />
+                    <input type="button" id="btn-voltar" value="Voltar" class="btn btn-warning" />
+                </div>
+            </div>  
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+<script>
+    $(document).ready(function () {
+
+        $('#btn-voltar').click(function () {
+            window.location.href = '/Campanha/Editar/@Model.Id.ToString()';
+        });
+
+    });
+
+
+</script>

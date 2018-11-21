@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -17,6 +18,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         protected readonly HttpClient _client;
         protected readonly string _token;
         protected readonly IHostingEnvironment _hostingEnvironment;
+        protected readonly string _caminho;
 
         #endregion
 
@@ -29,6 +31,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
             _client = new HttpClient();
             _client.BaseAddress = new Uri(_url);
             _hostingEnvironment = hostingEnvironment;
+            _caminho = Directory.GetDirectories(_hostingEnvironment.WebRootPath).Where(x => x.EndsWith("tmp")).SingleOrDefault();
 
         }
 

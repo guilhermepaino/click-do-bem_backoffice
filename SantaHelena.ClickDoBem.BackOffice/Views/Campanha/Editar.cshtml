@@ -11,6 +11,8 @@
     string dataFinalBr = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("dd/MM/yyyy");
     string dataFinal = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("yyyy-MM-dd hh:mm");
 
+    string imagem = string.IsNullOrWhiteSpace(Model.Imagem) ? "/images/noimage.jpg" : Model.Imagem;
+
 }
 
 <!-- Bootstrap -->
@@ -111,14 +113,24 @@
                 </div>
             </div>
 
+            <div class="form-group" style="padding-top: 30px;">
+                <label class="control-label col-sm-4 requiredField">
+                    <a href="~/Campanha/Upload/@Model.Id.ToString()"><img src="~/images/send-image.png" title="Enviar/Atualizar imagem" height="32" width="32" /></a>
+                </label>
+                <div class="col-sm-8">
+                    <div class="input-group drop">
+                        <img src="@imagem" width="320" height="240" class="img-rounded" alt="Cinque Terre" />
+                    </div>
+                </div>
+            </div>
 
-
-            <div class="form-group" style="padding-top: 50px;">
+            <div class="form-group" style="padding-top: 50px">
                 <input type="submit" id="btn-gravar" value="Gravar" class="btn btn-success" />
                 <input type="button" id="btn-voltar" value="Voltar" class="btn btn-warning" />
             </div>
 
         </form>
+
     </div>
 </div>
 
@@ -150,7 +162,7 @@
             data = '';
             if (dia != "" && mes != "" && ano != "")
                 data = ano + "-" + mes + "-" + dia + " " + (hora == "" ? "" : hora);
-            
+
             $('#data-inicial-value').val(data);
 
         });
@@ -165,7 +177,7 @@
             data = '';
             if (dia != "" && mes != "" && ano != "")
                 data = ano + "-" + mes + "-" + dia + " " + (hora == "" ? "" : hora);
-            
+
             $('#data-final-value').val(data);
 
         });

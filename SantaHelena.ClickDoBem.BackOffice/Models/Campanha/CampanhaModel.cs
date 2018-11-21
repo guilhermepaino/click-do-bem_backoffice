@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace SantaHelena.ClickDoBem.BackOffice.Models.Campanha
@@ -21,6 +22,8 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.Campanha
 
         [Required(ErrorMessage = "A prioridade deve ser informada")]
         public int? Prioridade { get; set; }
+
+        public string Imagem { get; set; }
 
     }
 }

@@ -18,6 +18,9 @@
     <Content Update="Views\Campanha\Adicionar.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Campanha\Upload.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Campanha\List.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
