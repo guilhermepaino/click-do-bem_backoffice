@@ -6,10 +6,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     string dataInicialBr = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("dd/MM/yyyy");
-    string dataInicial = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("yyyy-MM-dd hh:mm");
+    string dataInicial = Model.DataInicial == null ? string.Empty : Model.DataInicial.Value.ToString("yyyy-MM-dd HH:mm:ss");
 
     string dataFinalBr = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("dd/MM/yyyy");
-    string dataFinal = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("yyyy-MM-dd hh:mm");
+    string dataFinal = Model.DataFinal == null ? string.Empty : Model.DataFinal.Value.ToString("yyyy-MM-dd HH:mm:ss");
 
     string imagem = string.IsNullOrWhiteSpace(Model.Imagem) ? "/images/noimage.jpg" : Model.Imagem;
 
@@ -37,6 +37,7 @@
 <h2>Editar Campanha</h2>
 
 <div class="row">
+
     <div class="col-md-4">
         <form asp-action="Editar">
 
@@ -157,11 +158,11 @@
             dia = $(this)[0].value.substring(0, 2);
             mes = $(this)[0].value.substring(3, 5);
             ano = $(this)[0].value.substring(6, 10);
-            hora = $('#data-inicial-value')[0].value.substring(11, 16);
+            hora = $('#data-inicial-value')[0].value.substring(11, 19);
 
             data = '';
             if (dia != "" && mes != "" && ano != "")
-                data = ano + "-" + mes + "-" + dia + " " + (hora == "" ? "" : hora);
+                data = ano + "-" + mes + "-" + dia + " " + (hora == "" ? "00:00:00" : hora);
 
             $('#data-inicial-value').val(data);
 
@@ -172,11 +173,11 @@
             dia = $(this)[0].value.substring(0, 2);
             mes = $(this)[0].value.substring(3, 5);
             ano = $(this)[0].value.substring(6, 10);
-            hora = $('#data-final-value')[0].value.substring(11, 16);
+            hora = $('#data-final-value')[0].value.substring(11, 19);
 
             data = '';
             if (dia != "" && mes != "" && ano != "")
-                data = ano + "-" + mes + "-" + dia + " " + (hora == "" ? "" : hora);
+                data = ano + "-" + mes + "-" + dia + " " + (hora == "" ? "23:59:59" : hora);
 
             $('#data-final-value').val(data);
 

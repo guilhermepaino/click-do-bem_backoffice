@@ -25,5 +25,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.Campanha
 
         public string Imagem { get; set; }
 
+        public string Criticas { get; set; }
+
     }
 }

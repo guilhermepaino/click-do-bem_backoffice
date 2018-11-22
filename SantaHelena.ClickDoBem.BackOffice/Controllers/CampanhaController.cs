@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using SantaHelena.ClickDoBem.BackOffice.Exceptions;
-using SantaHelena.ClickDoBem.BackOffice.Models;
 using SantaHelena.ClickDoBem.BackOffice.Models.ApiDto;
 using SantaHelena.ClickDoBem.BackOffice.Models.Campanha;
 using System;
@@ -204,8 +203,14 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         public async Task<IActionResult> Upload(Guid id, IFormFile arquivo)
         {
 
+            CampanhaModel campanha = await LocalizarCampanha(id);
+            ViewBag.Prioridade = CarregarPrioridades(campanha.Prioridade);
+
             if (arquivo == null || arquivo.Length.Equals(0))
-                return View("Error", new ErrorViewModel() { Details = "Arquivo inválido ou vazio" });
+            {
+                campanha.Criticas = "Arquivo inválido ou vazio";
+                return View("Upload", campanha);
+            }
 
             // Salvar em pasta temporária
             string nomeArquivoBase = ContentDispositionHeaderValue.Parse(arquivo.ContentDisposition).FileName.Trim('"');
@@ -219,8 +224,11 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
 
             // Validando tipo de arquivo pela extenção
             string extensao = nomeArquivoBase.Split('.').LastOrDefault().ToLower();
-            if (string.IsNullOrWhiteSpace(extensao) || !"jpg|jpeg".Contains(extensao))
-                return View("Error", new ErrorViewModel() { Details = "Formato de arquivo inválido" });
+            if (string.IsNullOrWhiteSpace(extensao) || !"jpg|jpeg|png".Contains(extensao.ToLower()))
+            {
+                campanha.Criticas = "Formato de arquivo inválido";
+                return View("Upload", campanha);
+            }
 
             // Validando tamanho do arquivo
             using (sys.FileStream stream = new sys.FileStream(nomeCompleto, sys.FileMode.Create))
@@ -243,7 +251,10 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
 
             SimpleResponse response = JsonConvert.DeserializeObject<SimpleResponse>(conteudo);
             if (!response.Sucesso)
-                return View("Error", new ErrorViewModel() { Details = response.Mensagem });
+            {
+                campanha.Criticas = response.Mensagem;
+                return View("Upload", campanha);
+            }
 
             // Redirecionar para Listagem
             return View("List", await CarregarCampanhas());

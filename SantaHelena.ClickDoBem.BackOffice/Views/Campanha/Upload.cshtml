@@ -29,6 +29,17 @@
 <h2>Carregar Imagem de Campanha</h2>
 
 <div class="row">
+
+    @{
+        if (!string.IsNullOrWhiteSpace(Model.Criticas))
+        {
+            <div class="alert alert-warning alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>AVISO!</strong> @Model.Criticas
+            </div>
+        }
+    }
+
     <div class="col-md-4">
         <form asp-action="Upload" enctype="multipart/form-data">
 
@@ -77,7 +88,7 @@
                     <input type="submit" id="btn-upload" value="Enviar" class="btn btn-success" />
                     <input type="button" id="btn-voltar" value="Voltar" class="btn btn-warning" />
                 </div>
-            </div>  
+            </div>
 
         </form>
 
