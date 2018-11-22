@@ -9,7 +9,7 @@ using SantaHelena.ClickDoBem.BackOffice.Models.ApiDto;
 using SantaHelena.ClickDoBem.BackOffice.Models.Campanha;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using sys = System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -204,6 +204,9 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         public async Task<IActionResult> Upload(Guid id, IFormFile arquivo)
         {
 
+            if (arquivo == null || arquivo.Length.Equals(0))
+                return View("Error", new ErrorViewModel() { Details = "Arquivo inválido ou vazio" });
+
             // Salvar em pasta temporária
             string nomeArquivoBase = ContentDispositionHeaderValue.Parse(arquivo.ContentDisposition).FileName.Trim('"');
 
@@ -212,7 +215,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
 
             string nomeArquivoFileServer = $"{hashId}-{dataArquivo}_{id.ToString()}.jpg";
 
-            string nomeCompleto = Path.Combine(_caminho, nomeArquivoFileServer);
+            string nomeCompleto = sys.Path.Combine(_caminho, nomeArquivoFileServer);
 
             // Validando tipo de arquivo pela extenção
             string extensao = nomeArquivoBase.Split('.').LastOrDefault().ToLower();
@@ -220,13 +223,13 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                 return View("Error", new ErrorViewModel() { Details = "Formato de arquivo inválido" });
 
             // Validando tamanho do arquivo
-            using (FileStream stream = new FileStream(nomeCompleto, FileMode.Create))
+            using (sys.FileStream stream = new sys.FileStream(nomeCompleto, sys.FileMode.Create))
             {
                 arquivo.CopyTo(stream);
             }
 
             // Converter em Base64
-            byte[] bytes = System.IO.File.ReadAllBytes(nomeCompleto);
+            byte[] bytes = sys.File.ReadAllBytes(nomeCompleto);
             string arquivoImagemBase64 = Convert.ToBase64String(bytes);
 
             try { System.IO.File.Delete(nomeCompleto); }
@@ -242,11 +245,8 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
             if (!response.Sucesso)
                 return View("Error", new ErrorViewModel() { Details = response.Mensagem });
 
-            // Redirecionar para 
-            CampanhaModel campanha = await LocalizarCampanha(id);
-            ViewBag.Prioridade = CarregarPrioridades(campanha.Prioridade);
-
-            return View("Editar", campanha);
+            // Redirecionar para Listagem
+            return View("List", await CarregarCampanhas());
 
         }
 
