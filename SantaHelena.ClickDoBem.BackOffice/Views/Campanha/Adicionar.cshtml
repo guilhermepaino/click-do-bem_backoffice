@@ -37,7 +37,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Adicionar">
+        <form asp-action="Adicionar" enctype="multipart/form-data">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -105,6 +105,19 @@
                                     data-toggle="dropdown"></select>
                         </div>
 
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 30px;">
+                <label class="control-label col-sm-4 requiredField">
+                    Foto/Imagem:
+                </label>
+                <div class="col-sm-8">
+                    <div class="input-group drop">
+                        <input name="ImgCampanha" value="@Model.ImgCampanha" type="file" accept=".jpg,jpeg,.png" />
+                        <span asp-validation-for="ImgCampanha" class="text-danger"></span>
+                        <br />
                     </div>
                 </div>
             </div>
