@@ -102,7 +102,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
             return campanha;
         }
 
-        protected async Task<bool> ValidarArquivo(IFormFile arquivo)
+        protected bool ValidarArquivo(IFormFile arquivo)
         {
             // Salvar em pasta temporária
             string nomeArquivoBase = ContentDispositionHeaderValue.Parse(arquivo.ContentDisposition).FileName.Trim('"');
@@ -265,7 +265,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                 }
                 else
                 {
-                    if (!(await ValidarArquivo(model.ImgCampanha)))
+                    if (!(ValidarArquivo(model.ImgCampanha)))
                         ModelState.AddModelError("ImgCampanha", "Formato de arquivo inválido");
                 }
 
