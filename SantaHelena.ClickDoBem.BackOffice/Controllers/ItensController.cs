@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -16,7 +15,6 @@ using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using SantaHelena.ClickDoBem.BackOffice.Exceptions;
 using SantaHelena.ClickDoBem.BackOffice.Helpers.Planilha;
-using SantaHelena.ClickDoBem.BackOffice.Models;
 using SantaHelena.ClickDoBem.BackOffice.Models.ApiDto;
 using SantaHelena.ClickDoBem.BackOffice.Models.Itens;
 
@@ -522,60 +520,66 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         public IActionResult DownloadRelatorioItem([FromQuery]DateTime? dataInicial, DateTime? dataFinal, string tipoItem, string categoria)
         {
 
-            FiltroItensViewModel model = new FiltroItensViewModel()
+            try
             {
-                DataInicial = dataInicial,
-                DataFinal = dataFinal,
-                TipoItem = tipoItem,
-                Categoria = categoria
-            };
 
-            ExecutaPesquisa(model).Wait();
+                FiltroItensViewModel model = new FiltroItensViewModel()
+                {
+                    DataInicial = dataInicial,
+                    DataFinal = dataFinal,
+                    TipoItem = tipoItem,
+                    Categoria = categoria
+                };
 
-            IList<ReportPlanilhaItemViewModel> registros = new List<ReportPlanilhaItemViewModel>();
+                ExecutaPesquisa(model).Wait();
 
-            model.Itens.ToList().ForEach(i =>
-            {
-                registros.Add
-                (
-                    new ReportPlanilhaItemViewModel()
-                    {
-                        TipoItem = i.TipoItem,
-                        DataInclusao = i.DataInclusao,
-                        DataEfetivacao = i.DataEfetivacao,
-                        Doador = i.Doador,
-                        Receptor = i.Receptor,
-                        Titulo = i.Titulo,
-                        Descricao = i.Descricao,
-                        Categoria = i.Categoria,
-                        Peso = i.Peso,
-                        ValorFaixa = i.ValorFaixa,
-                        GerenciadaRh = i.GerenciadaRh
-                    }
-                );
-            });
+                IList<ReportPlanilhaItemViewModel> registros = new List<ReportPlanilhaItemViewModel>();
 
-            string caminho = Directory.GetDirectories(_hostingEnvironment.WebRootPath).Where(x => x.EndsWith("tmp")).SingleOrDefault();
-            string nomeBase = $"relatorio-itens-{Guid.NewGuid()}.xlsx";
+                model.Itens.ToList().ForEach(i =>
+                {
+                    registros.Add
+                    (
+                        new ReportPlanilhaItemViewModel()
+                        {
+                            TipoItem = i.TipoItem,
+                            DataInclusao = i.DataInclusao,
+                            DataEfetivacao = i.DataEfetivacao,
+                            Doador = i.Doador,
+                            Receptor = i.Receptor,
+                            Titulo = i.Titulo,
+                            Descricao = i.Descricao,
+                            Categoria = i.Categoria,
+                            Peso = i.Peso,
+                            ValorFaixa = i.ValorFaixa,
+                            GerenciadaRh = i.GerenciadaRh
+                        }
+                    );
+                });
 
-            string nomeArquivo = string.Empty;
-            using (Excel excel = new Excel(caminho))
-            {
-                nomeArquivo = Path.GetFileName(excel.Exportar(nomeBase, "Relatorio", registros, true, OfficeOpenXml.Table.TableStyles.Medium16, "TabRelatorio"));
+                string caminho = Directory.GetDirectories(_hostingEnvironment.WebRootPath).Where(x => x.EndsWith("tmp")).SingleOrDefault();
+                string nomeBase = $"relatorio-itens-{Guid.NewGuid()}.xlsx";
+
+                string nomeArquivo = string.Empty;
+                using (Excel excel = new Excel(caminho))
+                {
+                    nomeArquivo = Path.GetFileName(excel.Exportar(nomeBase, "Relatorio", registros, true, OfficeOpenXml.Table.TableStyles.Medium16, "TabRelatorio"));
+                }
+
+                IFileProvider provider = new PhysicalFileProvider(Path.Combine(caminho));
+                IFileInfo fileInfo = provider.GetFileInfo(nomeArquivo);
+                Stream readStream = fileInfo.CreateReadStream();
+                string mimeType = "application/vnd.ms-excel";
+
+                Task.Factory.StartNew(() =>
+                {
+                    Thread.Sleep(10000);
+                    System.IO.File.Delete(Path.Combine(caminho, nomeArquivo));
+                });
+
+                return File(readStream, mimeType, nomeArquivo);
+
             }
-
-            IFileProvider provider = new PhysicalFileProvider(Path.Combine(caminho));
-            IFileInfo fileInfo = provider.GetFileInfo(nomeArquivo);
-            Stream readStream = fileInfo.CreateReadStream();
-            string mimeType = "application/vnd.ms-excel";
-
-            Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(10000);
-                System.IO.File.Delete(Path.Combine(caminho, nomeArquivo));
-            });
-
-            return File(readStream, mimeType, nomeArquivo);
+            catch (SessaoExpiradaException) { return RedirectToAction("Logout", "Account"); }
 
         }
 
@@ -583,61 +587,68 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
         public IActionResult DownloadRelatorioMatch([FromQuery]DateTime? dataInicial, DateTime? dataFinal, string categoria, int efetivacao)
         {
 
-            EfetivaMatchViewModel model = new EfetivaMatchViewModel()
+            try
             {
-                DataInicial = dataInicial,
-                DataFinal = dataFinal,
-                Categoria = categoria,
-                Efetivacao = efetivacao
-            };
 
-            CarregarMatches(model).Wait();
+                EfetivaMatchViewModel model = new EfetivaMatchViewModel()
+                {
+                    DataInicial = dataInicial,
+                    DataFinal = dataFinal,
+                    Categoria = categoria,
+                    Efetivacao = efetivacao
+                };
 
-            IList<ReportPlanilhaMatchViewModel> registros = new List<ReportPlanilhaMatchViewModel>();
+                CarregarMatches(model).Wait();
 
-            model.Matches.ToList().ForEach(m =>
-            {
-                registros.Add
-                (
-                    new ReportPlanilhaMatchViewModel()
-                    {
-                        Id = m.Id,
-                        Data = m.Data,
-                        TipoMatch = m.TipoMatch,
-                        NomeDoador = m.NomeDoador,
-                        NomeReceptor = m.NomeReceptor,
-                        Titulo = m.Titulo,
-                        Descricao = m.Descricao,
-                        Categoria = m.Categoria,
-                        Pontuacao = m.Pontuacao,
-                        ValorFaixa = m.ValorFaixa,
-                        GerenciadaRh = m.GerenciadaRh,
-                        Efetivado = m.Efetivado
-                    }
-                );
-            });
+                IList<ReportPlanilhaMatchViewModel> registros = new List<ReportPlanilhaMatchViewModel>();
 
-            string caminho = Directory.GetDirectories(_hostingEnvironment.WebRootPath).Where(x => x.EndsWith("tmp")).SingleOrDefault();
-            string nomeBase = $"relatorio-matches-{Guid.NewGuid()}.xlsx";
+                model.Matches.ToList().ForEach(m =>
+                {
+                    registros.Add
+                    (
+                        new ReportPlanilhaMatchViewModel()
+                        {
+                            Id = m.Id,
+                            Data = m.Data,
+                            TipoMatch = m.TipoMatch,
+                            NomeDoador = m.NomeDoador,
+                            NomeReceptor = m.NomeReceptor,
+                            Titulo = m.Titulo,
+                            Descricao = m.Descricao,
+                            Categoria = m.Categoria,
+                            Pontuacao = m.Pontuacao,
+                            ValorFaixa = m.ValorFaixa,
+                            GerenciadaRh = m.GerenciadaRh,
+                            Efetivado = m.Efetivado
+                        }
+                    );
+                });
 
-            string nomeArquivo = string.Empty;
-            using (Excel excel = new Excel(caminho))
-            {
-                nomeArquivo = Path.GetFileName(excel.Exportar(nomeBase, "Relatorio", registros, true, OfficeOpenXml.Table.TableStyles.Medium16, "TabRelatorio"));
+                string caminho = Directory.GetDirectories(_hostingEnvironment.WebRootPath).Where(x => x.EndsWith("tmp")).SingleOrDefault();
+                string nomeBase = $"relatorio-matches-{Guid.NewGuid()}.xlsx";
+
+                string nomeArquivo = string.Empty;
+                using (Excel excel = new Excel(caminho))
+                {
+                    nomeArquivo = Path.GetFileName(excel.Exportar(nomeBase, "Relatorio", registros, true, OfficeOpenXml.Table.TableStyles.Medium16, "TabRelatorio"));
+                }
+
+                IFileProvider provider = new PhysicalFileProvider(Path.Combine(caminho));
+                IFileInfo fileInfo = provider.GetFileInfo(nomeArquivo);
+                Stream readStream = fileInfo.CreateReadStream();
+                string mimeType = "application/vnd.ms-excel";
+
+                Task.Factory.StartNew(() =>
+                {
+                    Thread.Sleep(10000);
+                    System.IO.File.Delete(Path.Combine(caminho, nomeArquivo));
+                });
+
+                return File(readStream, mimeType, nomeArquivo);
+
             }
+            catch (SessaoExpiradaException) { return RedirectToAction("Logout", "Account"); }
 
-            IFileProvider provider = new PhysicalFileProvider(Path.Combine(caminho));
-            IFileInfo fileInfo = provider.GetFileInfo(nomeArquivo);
-            Stream readStream = fileInfo.CreateReadStream();
-            string mimeType = "application/vnd.ms-excel";
-
-            Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(10000);
-                System.IO.File.Delete(Path.Combine(caminho, nomeArquivo));
-            });
-
-            return File(readStream, mimeType, nomeArquivo);
         }
 
         #endregion
