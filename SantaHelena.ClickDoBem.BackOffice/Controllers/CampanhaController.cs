@@ -249,6 +249,8 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
             try
             {
 
+                ViewBag.Prioridade = CarregarPrioridades(model.Prioridade);
+
                 if (!ModelState.IsValid)
                     return View("Adicionar", model);
 
@@ -270,10 +272,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                 }
 
                 if (ModelState.ErrorCount > 0)
-                {
-                    ViewBag.Prioridade = CarregarPrioridades(model.Prioridade);
                     return View("Adicionar", model);
-                }
 
                 SimpleResponseObj resposta = await AdicionarRegistro(model);
                 if (resposta.Sucesso)
