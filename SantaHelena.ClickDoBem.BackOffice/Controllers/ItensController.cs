@@ -214,7 +214,10 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                     Descricao = item.Descricao,
                     Categoria = item.Categoria.Descricao,
                     Peso = item.Categoria.Pontuacao,
-                    GerenciadaRh = item.Categoria.GerenciadaRh
+                    GerenciadaRh = item.Categoria.GerenciadaRh,
+                    Telefone = item.Usuario.UsuarioDados.TelefoneFixo,
+                    Celular = item.Usuario.UsuarioDados.TelefoneCelular,
+                    Email = item.Usuario.UsuarioDados.Email
                 };
 
                 if (item.TipoItem.Descricao.ToLower().Equals("necessidade"))

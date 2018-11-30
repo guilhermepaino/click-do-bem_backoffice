@@ -21,5 +21,11 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.Itens
 
         public bool GerenciadaRh { get; set; }
 
+        public String Telefone { get; set; }
+
+        public String Celular { get; set; }
+
+        public String Email { get; set; }
+
     }
 }
