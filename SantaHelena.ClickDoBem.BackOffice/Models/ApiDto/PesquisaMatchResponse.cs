@@ -28,12 +28,18 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.ApiDto
         /// Nome do doador
         /// </summary>
         public string NomeDoador { get; set; }
+        public string TelefoneDoador { get; set; }
+        public string CelularDoador { get; set; }
+        public string EmailDoador { get; set; }
 
         /// <summary>
         /// Nome do receptor
         /// </summary>
         public string NomeReceptor { get; set; }
-
+        public string TelefoneReceptor { get; set; }
+        public string CelularReceptor { get; set; }
+        public string EmailReceptor { get; set; }
+        
         /// <summary>
         /// Título do item
         /// </summary>
