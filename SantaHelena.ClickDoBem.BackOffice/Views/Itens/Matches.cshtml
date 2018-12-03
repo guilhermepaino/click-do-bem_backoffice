@@ -13,8 +13,7 @@
 
 @model SantaHelena.ClickDoBem.BackOffice.Models.Itens.FiltroMatchViewModel
 
-<h2>Matches de Itens</h2>
-<br />
+<h2>Realizar Matches</h2>
 
 <h4>Filtros</h4>
 
@@ -60,76 +59,70 @@
 <div class="bootstrap-iso">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <form asp-area="" asp-controller="Itens" asp-action="FiltrarMatches" id="form-filtro" class="form-horizontal" method="post" autocomplete="off">
 
-                    <div class="form-group ">
-                        <label class="control-label col-sm-2 requiredField" for="DataInicial">
+            <form asp-area="" asp-controller="Itens" asp-action="FiltrarMatches" id="form-filtro" class="form-horizontal" method="post" autocomplete="off">
+
+                <div class="form-group ">
+
+                    <div class="col-sm-2">
+                        <label class="control-label requiredField" for="DataInicial">
                             De:
                         </label>
-                        <div class="col-sm-4">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar">
-                                    </i>
-                                </div>
-                                <input class="form-control" id="data-inicial" placeholder="dd/mm/aaaa" type="text" value="@dataInicialBr" />
-                                <input type="hidden" name="DataInicial" value="@dataInicial" />
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar">
+                                </i>
                             </div>
+                            <input class="form-control" id="data-inicial" placeholder="dd/mm/aaaa" type="text" value="@dataInicialBr" />
+                            <input type="hidden" name="DataInicial" value="@dataInicial" />
                         </div>
+                    </div>
 
-                        <label class="control-label col-sm-2 requiredField" for="DataFinal">
+                    <div class="col-sm-2">
+                        <label class="control-label requiredField" for="DataFinal">
                             Até:
                         </label>
-                        <div class="col-sm-4">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar">
-                                    </i>
-                                </div>
-                                <input class="form-control" id="data-final" placeholder="dd/mm/aaaa" type="text" value="@dataFinalBr" />
-                                <input type="hidden" name="DataFinal" value="@dataFinal" />
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar">
+                                </i>
                             </div>
+                            <input class="form-control" id="data-final" placeholder="dd/mm/aaaa" type="text" value="@dataFinalBr" />
+                            <input type="hidden" name="DataFinal" value="@dataFinal" />
                         </div>
-
                     </div>
 
-                    <div class="form-group ">
-                        <label class="control-label col-sm-2 requiredField">
+                    <div class="col-sm-3">
+                        <label class="control-label requiredField">
                             Categoria:
                         </label>
-
-                        <div class="col-sm-4">
-                            <div class="input-group drop">
-                                <div>
-                                    <select asp-items="@ViewBag.Categoria" name="Categoria"
-                                            id="filtro-categoria"
-                                            class="selectpicker"
-                                            data-style="btn btn-info btn-round select-with-transition dropdown-picker-selected"
-                                            data-toggle="dropdown"></select>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-sm-2 requiredField" for="dataInicial">
-                            &nbsp;
-                        </label>
-                        <div class="col-sm-4">
-                            <div class="input-group drop">
-                                <div>
-                                    <input type="submit" class="btn btn-primary" value="Filtrar" />
-                                </div>
+                        <div class="input-group drop">
+                            <div>
+                                <select asp-items="@ViewBag.Categoria" name="Categoria"
+                                        id="filtro-categoria"
+                                        class="selectpicker"
+                                        data-style="btn btn-info btn-round select-with-transition dropdown-picker-selected"
+                                        data-toggle="dropdown"></select>
                             </div>
                         </div>
                     </div>
 
-                </form>
+                </div>
 
-            </div>
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <div class="input-group drop pull-left">
+                            <div>
+                                <input type="submit" class="btn btn-primary" value="Filtrar" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </form>
+
+
         </div>
     </div>
 </div>
@@ -146,7 +139,7 @@
 
 <!-- TABELA DE DOAÇÃO INÍCIO -->
 
-<div class="row">
+<div>
     <hr />
     <h4>Doações</h4>
 </div>
@@ -163,7 +156,7 @@
                     <tr>
                         <th></th>
                         <th>Criação</th>
-                        <th>Doador</th>
+                        <th>Dados Doador</th>
                         <th>Título</th>
                         <th>Descrição</th>
                         <th>Categoria</th>
@@ -178,13 +171,26 @@
                         {
                             <tr>
                                 <td><input type="radio" class="radio-inline" id="selecao-doacao" name="doacao" value="@item.Id" data-guid="@item.Id" /></td>
-                                <td>@item.DataInclusao.ToString("dd/MM/yyyy")</td>
-                                <td>@item.Nome</td>
-                                <td>@item.Titulo</td>
-                                <td>@item.Descricao</td>
-                                <td>@item.Categoria</td>
-                                <td>@item.Peso</td>
-                                <td>@(item.GerenciadaRh ? "sim" : "não")</td>
+                                <td class="text-nowrap">@item.DataInclusao.ToString("dd/MM/yyyy")</td>
+                                <td class="text-nowrap">
+                                    <div>@item.Nome</div>
+                                    <div>@item.Telefone</div>
+                                    <div>@item.Celular</div>
+                                    <div>@item.Email</div>
+                                </td>
+                                <td class="text-nowrap">@item.Titulo</td>
+                                <td>
+                                    <div style="width: 200px">
+                                        @item.Descricao
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="width: 100px">
+                                        @item.Categoria
+                                    </div>
+                                </td>
+                                <td class="text-nowrap">@item.Peso</td>
+                                <td class="text-nowrap">@(item.GerenciadaRh ? "sim" : "não")</td>
                             </tr>
                         }
                     }
@@ -199,7 +205,7 @@
 <!-- TABELA DE DOAÇÃO FIM -->
 
 
-<div class="row">
+<div>
     <hr />
     <h4>Necessidades</h4>
 </div>
@@ -216,7 +222,7 @@
                     <tr>
                         <th></th>
                         <th>Criação</th>
-                        <th>Receptor</th>
+                        <th>Dados Receptor</th>
                         <th>Título</th>
                         <th>Descrição</th>
                         <th>Categoria</th>
@@ -231,13 +237,26 @@
                         {
                             <tr>
                                 <td><input type="radio" class="radio-inline" id="selecao-necessidade" name="necessidade" value="@item.Id" data-guid="@item.Id" /></td>
-                                <td>@item.DataInclusao.ToString("dd/MM/yyyy")</td>
-                                <td>@item.Nome</td>
-                                <td>@item.Titulo</td>
-                                <td>@item.Descricao</td>
-                                <td>@item.Categoria</td>
-                                <td>@item.Peso</td>
-                                <td>@(item.GerenciadaRh ? "sim" : "não")</td>
+                                <td class="text-nowrap">@item.DataInclusao.ToString("dd/MM/yyyy")</td>
+                                <td class="text-nowrap">
+                                    <div>@item.Nome</div>
+                                    <div>@item.Telefone</div>
+                                    <div>@item.Celular</div>
+                                    <div>@item.Email</div>
+                                </td>
+                                <td class="text-nowrap">@item.Titulo</td>
+                                <td>
+                                    <div style="width: 200px">
+                                        @item.Descricao
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="width: 100px">
+                                        @item.Categoria
+                                    </div>
+                                </td>
+                                <td class="text-nowrap">@item.Peso</td>
+                                <td class="text-nowrap">@(item.GerenciadaRh ? "sim" : "não")</td>
                             </tr>
                         }
                     }
@@ -251,9 +270,9 @@
 
 <!-- TABELA DE NECESSIDADE FIM -->
 
-<hr />
+<br />
 <div class="form-group">
-    <div class="col-sm-4">
+    <div class="col-sm-12">
         <div class="input-group drop">
             <div>
                 <input type="button" class="btn btn-success" id="btn-match" value="Realizar Match" />
@@ -261,7 +280,8 @@
         </div>
     </div>
 </div>
-
+<br />
+<br />
 
 <script>
 
@@ -277,7 +297,38 @@
             language: 'pt-BR',
         });
 
-        $('#tabela-doacoes, #tabela-necessidades').dataTable();
+        $('#tabela-doacoes, #tabela-necessidades').DataTable({
+            responsive: true,
+            fixedHeader: {
+                header: true,
+                footer: true
+            },
+            scrollX: true,
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "Nenhum resultado",
+                "sEmptyTable": "Nenhum dado disponível para essa tabela",
+                "sInfo": "Mostrando registros de _START_ até _END_ de um total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros de 0 à 0 de um total de 0 registros",
+                "sInfoFiltered": "(filtrado de um total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Carregando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": ">",
+                    "sPrevious": "<"
+                },
+                "oAria": {
+                    "sSortAscending": ": Clique para ordenar de forma ascendente",
+                    "sSortDescending": ": Clique para odenar de forma descendente"
+                }
+            }
+        });
 
         $("[data-toggle=tooltip]").tooltip();
 
@@ -363,33 +414,6 @@
 
         });
 
-    });
-
-    $('#tabela-doacoes, #tabela-necessidades').DataTable({
-        "language": {
-            "sProcessing": "Procesando...",
-            "sLengthMenu": "Mostrar _MENU_ registros",
-            "sZeroRecords": "Nenhum resultado",
-            "sEmptyTable": "Nenhum dado disponível para essa tabela",
-            "sInfo": "Mostrando registros de _START_ até _END_ de um total de _TOTAL_ registros",
-            "sInfoEmpty": "Mostrando registros de 0 à 0 de um total de 0 registros",
-            "sInfoFiltered": "(filtrado de um total de _MAX_ registros)",
-            "sInfoPostFix": "",
-            "sSearch": "Buscar:",
-            "sUrl": "",
-            "sInfoThousands": ",",
-            "sLoadingRecords": "Carregando...",
-            "oPaginate": {
-                "sFirst": "Primero",
-                "sLast": "Último",
-                "sNext": ">",
-                "sPrevious": "<"
-            },
-            "oAria": {
-                "sSortAscending": ": Clique para ordenar de forma ascendente",
-                "sSortDescending": ": Clique para odenar de forma descendente"
-            }
-        }
     });
 
 </script>

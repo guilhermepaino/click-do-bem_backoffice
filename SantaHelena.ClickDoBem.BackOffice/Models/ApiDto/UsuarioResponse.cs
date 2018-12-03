@@ -8,6 +8,8 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.ApiDto
         public Guid Id { get; set; }
         public string Nome { get; set; }
         public string CpfCnpj { get; set; }
+        public UsuarioDadosResponse UsuarioDados { get; set; }
+
 
     }
 }

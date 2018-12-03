@@ -214,7 +214,10 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                     Descricao = item.Descricao,
                     Categoria = item.Categoria.Descricao,
                     Peso = item.Categoria.Pontuacao,
-                    GerenciadaRh = item.Categoria.GerenciadaRh
+                    GerenciadaRh = item.Categoria.GerenciadaRh,
+                    Telefone = item.Usuario.UsuarioDados.TelefoneFixo,
+                    Celular = item.Usuario.UsuarioDados.TelefoneCelular,
+                    Email = item.Usuario.UsuarioDados.Email
                 };
 
                 if (item.TipoItem.Descricao.ToLower().Equals("necessidade"))
@@ -611,14 +614,15 @@ namespace SantaHelena.ClickDoBem.BackOffice.Controllers
                             Id = m.Id,
                             Data = m.Data,
                             TipoMatch = m.TipoMatch,
-                            NomeDoador = m.NomeDoador,
-                            NomeReceptor = m.NomeReceptor,
-                            Titulo = m.Titulo,
-                            Descricao = m.Descricao,
-                            Categoria = m.Categoria,
+                            ContatoDoador = $"{m.NomeDoador}\n{m.TelefoneDoador}\n{m.CelularDoador}\n{m.EmailDoador}",
+                            ContatoReceptor = $"{m.NomeReceptor}\n{m.TelefoneReceptor}\n{m.CelularReceptor}\n{m.EmailReceptor}",
+                            DadosItem = $"Título: {m.Titulo}\nDescrição: {m.Descricao}\nCategoria: {m.Categoria}\nValor: {m.ValorFaixa}\nGerenciada RH: {(m.GerenciadaRh ? "Sim" : "Não")}",
+                            // Titulo = m.Titulo,
+                            // Descricao = m.Descricao,
+                            // Categoria = m.Categoria,
                             Pontuacao = m.Pontuacao,
-                            ValorFaixa = m.ValorFaixa,
-                            GerenciadaRh = m.GerenciadaRh,
+                            // ValorFaixa = m.ValorFaixa,
+                            // GerenciadaRh = m.GerenciadaRh,
                             Efetivado = m.Efetivado
                         }
                     );
