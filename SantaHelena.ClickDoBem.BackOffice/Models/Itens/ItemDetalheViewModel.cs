@@ -12,9 +12,14 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.Itens
         public DateTime? DataEfetivacao { get; set; }
 
         public string Doador { get; set; } // aparecer Anonônimo se aplicável
+        public string TelefoneDoador { get; set; }
+        public string CelularDoador { get; set; }
+        public string EmailDoador { get; set; }
 
         public string Receptor { get; set; } // aparecer Anonônimo se aplicável
-
+        public string TelefoneReceptor { get; set; }
+        public string CelularReceptor { get; set; }
+        public string EmailReceptor { get; set; }
         public string Titulo { get; set; }
 
         public string Descricao { get; set; }

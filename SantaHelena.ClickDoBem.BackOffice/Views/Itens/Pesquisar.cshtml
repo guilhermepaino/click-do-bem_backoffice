@@ -61,110 +61,87 @@
 <div class="bootstrap-iso">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <form asp-area="" asp-controller="Itens" asp-action="Filtrar" class="form-horizontal" method="post" autocomplete="off">
 
-                    <div class="form-group ">
-                        <label class="control-label col-sm-2 requiredField" for="DataInicial">
+            <form asp-area="" asp-controller="Itens" asp-action="Filtrar" class="form-horizontal" method="post" autocomplete="off">
+
+                <div class="form-group ">
+
+                    <div class="col-sm-2">
+                        <label class="control-label requiredField" for="DataInicial">
                             De:
                         </label>
-                        <div class="col-sm-4">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar">
-                                    </i>
-                                </div>
-                                <input class="form-control" id="data-inicial" placeholder="dd/mm/aaaa" type="text" value="@dataInicialBr" />
-                                <input type="hidden" name="DataInicial" value="@dataInicial" />
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar">
+                                </i>
                             </div>
+                            <input class="form-control" id="data-inicial" placeholder="dd/mm/aaaa" type="text" value="@dataInicialBr" />
+                            <input type="hidden" name="DataInicial" value="@dataInicial" />
                         </div>
+                    </div>
 
-                        <label class="control-label col-sm-2 requiredField" for="DataFinal">
+                    <div class="col-sm-2">
+                        <label class="control-label requiredField" for="DataFinal">
                             Até:
                         </label>
-                        <div class="col-sm-4">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar">
-                                    </i>
-                                </div>
-                                <input class="form-control" id="data-final" placeholder="dd/mm/aaaa" type="text" value="@dataFinalBr" />
-                                <input type="hidden" name="DataFinal" value="@dataFinal" />
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar">
+                                </i>
                             </div>
+                            <input class="form-control" id="data-final" placeholder="dd/mm/aaaa" type="text" value="@dataFinalBr" />
+                            <input type="hidden" name="DataFinal" value="@dataFinal" />
                         </div>
-
                     </div>
 
-                    <div class="form-group ">
-                        <label class="control-label col-sm-2 requiredField">
-                            Tipo:
-                        </label>
-
-                        <div class="col-sm-4">
-                            <div class="input-group drop">
-
-                                <div>
-                                    <select asp-items="@ViewBag.TipoItem" name="TipoItem"
-                                            id="filtro-tipo"
-                                            class="selectpicker"
-                                            data-style="btn btn-info btn-round select-with-transition dropdown-picker-selected"
-                                            data-toggle="dropdown"></select>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="form-group ">
-                        <label class="control-label col-sm-2 requiredField">
+                    <div class="col-sm-4">
+                        <label class="control-label requiredField">
                             Categoria:
                         </label>
-
-                        <div class="col-sm-4">
-                            <div class="input-group drop">
-                                <div>
-                                    <select asp-items="@ViewBag.Categoria" name="Categoria"
-                                            id="filtro-categoria"
-                                            class="selectpicker"
-                                            data-style="btn btn-info btn-round select-with-transition dropdown-picker-selected"
-                                            data-toggle="dropdown"></select>
-                                </div>
-
+                        <div class="input-group drop">
+                            <div>
+                                <select asp-items="@ViewBag.Categoria" name="Categoria"
+                                        id="filtro-categoria"
+                                        class="selectpicker"
+                                        data-style="btn btn-info btn-round select-with-transition dropdown-picker-selected"
+                                        data-toggle="dropdown"></select>
                             </div>
                         </div>
-
                     </div>
 
-                    <div class="form-group">
-                        <label class="control-label col-sm-2 requiredField" for="dataInicial">
+                    <div class="col-sm-4">
+                        <label class="control-label requiredField">
+                            Tipo:
+                        </label>
+                        <div class="input-group drop">
+                            <div>
+                                <select asp-items="@ViewBag.TipoItem" name="TipoItem"
+                                        id="filtro-tipo"
+                                        class="selectpicker"
+                                        data-style="btn btn-info btn-round select-with-transition dropdown-picker-selected"
+                                        data-toggle="dropdown"></select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12">
+                        <label class="control-label requiredField" for="dataInicial">
                             &nbsp;
                         </label>
-                        <div class="col-sm-4">
-                            <div class="input-group drop">
-                                <div>
-                                    <input type="submit" class="btn btn-primary" value="Filtrar" />
-                                </div>
-                            </div>
+                        <div class="input-group">
+                            <input type="submit" class="btn btn-primary" value="Filtrar" />
+                            @if (Model.Itens != null && Model.Itens.Count() > 0)
+                            {
+                                <input type="button" class="btn btn-default" id="btn-download" value="Exportar Planilha" style="margin-left: 10px"/>
+                            }
                         </div>
-
-                        @if (Model.Itens != null && Model.Itens.Count() > 0)
-                        {
-                            <div class="col-sm-6">
-                                <div class="input-group drop">
-                                    <div>
-                                        <input type="button" class="btn btn-sm" id="btn-download" value="Baixar Resultado" />
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
                     </div>
 
-                </form>
+                </div>
+            </form>
 
-            </div>
+
         </div>
     </div>
 </div>
@@ -197,8 +174,8 @@
                         <th>Tipo</th>
                         <th>Criação</th>
                         <th>Efetivação</th>
-                        <th>Doador</th>
-                        <th>Receptor</th>
+                        <th>Contato do Doador</th>
+                        <th>Contato do Receptor</th>
                         <th>Título</th>
                         <th>Descrição</th>
                         <th>Categoria</th>
@@ -215,8 +192,18 @@
                                 <td>@item.TipoItem</td>
                                 <td>@item.DataInclusao.ToString("dd/MM/yyyy")</td>
                                 <td>@(item.DataEfetivacao.HasValue ? item.DataEfetivacao.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
-                                <td>@item.Doador</td>
-                                <td>@item.Receptor</td>
+                                <td>
+                                    <div>@item.Doador</div>
+                                    <div>@item.TelefoneDoador</div>
+                                    <div>@item.CelularDoador</div>
+                                    <div>@item.EmailDoador</div>
+                                </td>
+                                <td>
+                                    <div>@item.Receptor</div>
+                                    <div>@item.TelefoneReceptor</div>
+                                    <div>@item.CelularReceptor</div>
+                                    <div>@item.EmailReceptor</div>
+                                </td>
                                 <td>@item.Titulo</td>
                                 <td>@item.Descricao</td>
                                 <td>@item.Categoria</td>
@@ -246,7 +233,6 @@
         });
 
         // Datatable
-        $('#datatable').dataTable();
         $("[data-toggle=tooltip]").tooltip();
 
         $('#data-inicial').change(function () {
@@ -316,6 +302,12 @@
     });
 
     $('#datatable').DataTable({
+        responsive: true,
+            fixedHeader: {
+                header: true,
+                footer: true
+            },
+            scrollX: true,
         "language": {
             "sProcessing": "Procesando...",
             "sLengthMenu": "Mostrar _MENU_ registros",
