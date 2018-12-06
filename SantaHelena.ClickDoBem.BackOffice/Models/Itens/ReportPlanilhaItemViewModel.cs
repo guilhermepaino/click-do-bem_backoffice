@@ -10,7 +10,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.Itens
 
         [ExcelColumn(
             Order = 1,
-            Title = "Tipo Item",
+            Title = "Tipo",
             TitleVerticalAlignment = ExcelVerticalAlignment.Center,
             TitleHorizontalAlignment = ExcelHorizontalAlignment.Center,
             ContentVerticalAlignment = ExcelVerticalAlignment.Center,
@@ -20,7 +20,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.Itens
 
         [ExcelColumn(
             Order = 2,
-            Title = "Dt.Inclusão",
+            Title = "Criação",
             TitleVerticalAlignment = ExcelVerticalAlignment.Center,
             TitleHorizontalAlignment = ExcelHorizontalAlignment.Center,
             ContentVerticalAlignment = ExcelVerticalAlignment.Center,
@@ -31,7 +31,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.Itens
 
         [ExcelColumn(
             Order = 3,
-            Title = "Dt.Efetivação",
+            Title = "Efetivação",
             TitleVerticalAlignment = ExcelVerticalAlignment.Center,
             TitleHorizontalAlignment = ExcelHorizontalAlignment.Center,
             ContentVerticalAlignment = ExcelVerticalAlignment.Center,
@@ -42,7 +42,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.Itens
 
         [ExcelColumn(
             Order = 4,
-            Title = "Doador",
+            Title = "Contato do Doador",
             TitleVerticalAlignment = ExcelVerticalAlignment.Center,
             TitleHorizontalAlignment = ExcelHorizontalAlignment.Center,
             ContentVerticalAlignment = ExcelVerticalAlignment.Center,
@@ -52,7 +52,7 @@ namespace SantaHelena.ClickDoBem.BackOffice.Models.Itens
 
         [ExcelColumn(
             Order = 5,
-            Title = "Receptor",
+            Title = "Contato do Receptor",
             TitleVerticalAlignment = ExcelVerticalAlignment.Center,
             TitleHorizontalAlignment = ExcelHorizontalAlignment.Center,
             ContentVerticalAlignment = ExcelVerticalAlignment.Center,
