@@ -174,7 +174,8 @@
                         <!-- <th>Descrição</th> -->
                         <!-- <th>Categoria</th> -->
                         <!-- <th>Faixa Valor</th> -->
-                        <th>Situação</th>
+                        <th>Pontuação</th>
+                        <th>Efetivado</th>
                         <!-- <th>Gerenciado RH</th> -->
                     </tr>
                 </thead>
@@ -207,16 +208,17 @@
                                 <!-- <td class="text-nowrap">@item.Titulo</td> -->
                                 <td>
                                     <div style="width: 250px">
-                                        <div><b>Título:</b> @item.Descricao</div>
+                                        <div><b>Título:</b> @item.Titulo</div>
                                         <div><b>Descrição:</b> @item.Descricao</div>
-                                        <div><b>Categoria:</b> @item.Descricao</div>
-                                        <div><b>Valor:</b> @item.Descricao</div>
+                                        <div><b>Categoria:</b> @item.Categoria</div>
+                                        <div><b>Valor:</b> @item.ValorFaixa</div>
                                         <div><b>Gerenciado pelo RH:</b> @(item.GerenciadaRh ? "Sim" : "Não")</div>
                                     </div>
                                 </td>
                                 <!-- <td><div style="width: 150px">@item.Categoria</div></td> -->
                                 <!-- <td class="text-nowrap">@item.ValorFaixa</td> -->
-                                <td class="text-nowrap">@(item.Efetivado ? "Efetivado" : "Pendente")</td>
+                                <td class="text-nowrap">@(item.Efetivado ? "Sim" : "Não")</td>
+                                <td class="text-nowrap">@item.Pontuacao</td>
                                 <!-- <td class="text-nowrap">@(item.GerenciadaRh ? "Sim" : "Não")</td> -->
                             </tr>
                         }
