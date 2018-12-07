@@ -3,7 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SantaHelena.ClickDoBem.BackOffice", "SantaHelena.ClickDoBem.BackOffice\SantaHelena.ClickDoBem.BackOffice.csproj", "{55D8EEFA-95B3-43E1-9691-BA7E17BEC942}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SantaHelena.ClickDoBem.BackOffice", "SantaHelena.ClickDoBem.BackOffice\SantaHelena.ClickDoBem.BackOffice.csproj", "{55D8EEFA-95B3-43E1-9691-BA7E17BEC942}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DockerScripts", "DockerScripts", "{FBB18A88-E623-4604-B8F5-9C9E7AFE7B9B}"
+	ProjectSection(SolutionItems) = preProject
+		SantaHelena.ClickDoBem.BackOffice\DockerScripts\dev-backoffice.deploy.sh = SantaHelena.ClickDoBem.BackOffice\DockerScripts\dev-backoffice.deploy.sh
+		SantaHelena.ClickDoBem.BackOffice\DockerScripts\hml-backoffice.deploy.sh = SantaHelena.ClickDoBem.BackOffice\DockerScripts\hml-backoffice.deploy.sh
+		SantaHelena.ClickDoBem.BackOffice\DockerScripts\prod-backoffice.deploy.sh = SantaHelena.ClickDoBem.BackOffice\DockerScripts\prod-backoffice.deploy.sh
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
